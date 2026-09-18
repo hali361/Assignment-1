@@ -3,7 +3,7 @@ from data_processing import print_stats
 
 
 # load data
-filename = './A1_partial_solution/student_dataset.txt'
+filename = 'student_dataset.txt'
 table = load_from_html(filename)
 
 # print table statistics
