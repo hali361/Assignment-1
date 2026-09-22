@@ -150,3 +150,37 @@ def save_to_json(data: list[dict], filename: str) -> None:
                     file.write(', ')
 
             file.write(']')
+
+def load_data(filename: str) -> list[dict]:
+    """
+    determines if a file is a CSV or HTML file and loads it accordingly
+    """
+
+    with open(filename, 'r') as file:
+        first_part = file.read(1000)
+
+    first_line = first_part.split('\n')[0]
+
+    #check if the file is HTML
+    if '<table' in first_part and '<thead>' in first_part:
+        try:
+            return load_from_html(filename)
+        except Exception:
+            raise Exception(
+                'Error, data must be in valid CSV or HTML format'
+            )
+
+    #check if the file is CSV
+    
+    if ',' in first_line:
+        try:
+            return load_from_csv(filename)
+        except Exception:
+            raise Exception(
+                'Error, data must be in valid CSV or HTML format'
+            )
+
+
+    raise Exception(
+        'Error, data must be in valid CSV or HTML format'
+    )
