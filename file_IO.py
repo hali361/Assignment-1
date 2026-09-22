@@ -115,3 +115,38 @@ def load_from_csv(filename: str) -> list[dict]:
             all_rows.append(row_dict)
 
     return all_rows
+
+def save_to_json(data: list[dict], filename: str) -> None:
+        """
+        saves a dataset stored as a file as JSON format
+        """
+
+        with open(filename, 'w') as file:
+            file.write('[')
+
+            for i in range(len(data)):
+                row = data[i]
+                file.write('{')
+
+                keys = list(row.keys())
+
+                for j in range(len(keys)):
+                    key = keys[j]
+                    value = row[key]
+
+                    file.write('"' + key + '": ')
+
+                    if type(value) == str:
+                        file.write('"' + value + '"')
+                    else:
+                        file.write(str(value))
+
+                    if j < len(keys) - 1:
+                        file.write(', ')
+
+                file.write('}')
+
+                if i < len(data) - 1:
+                    file.write(', ')
+
+            file.write(']')
