@@ -115,3 +115,72 @@ def load_from_csv(filename: str) -> list[dict]:
             all_rows.append(row_dict)
 
     return all_rows
+
+def save_to_json(data: list[dict], filename: str) -> None:
+        """
+        saves a dataset stored as a file as JSON format
+        """
+
+        with open(filename, 'w') as file:
+            file.write('[')
+
+            for i in range(len(data)):
+                row = data[i]
+                file.write('{')
+
+                keys = list(row.keys())
+
+                for j in range(len(keys)):
+                    key = keys[j]
+                    value = row[key]
+
+                    file.write('"' + key + '": ')
+
+                    if type(value) == str:
+                        file.write('"' + value + '"')
+                    else:
+                        file.write(str(value))
+
+                    if j < len(keys) - 1:
+                        file.write(', ')
+
+                file.write('}')
+
+                if i < len(data) - 1:
+                    file.write(', ')
+
+            file.write(']')
+
+def load_data(filename: str) -> list[dict]:
+    """
+    determines if a file is a CSV or HTML file and loads it accordingly
+    """
+
+    with open(filename, 'r') as file:
+        first_part = file.read(1000)
+
+    first_line = first_part.split('\n')[0]
+
+    #check if the file is HTML
+    if '<table' in first_part and '<thead>' in first_part:
+        try:
+            return load_from_html(filename)
+        except Exception:
+            raise Exception(
+                'Error, data must be in valid CSV or HTML format'
+            )
+
+    #check if the file is CSV
+    
+    if ',' in first_line:
+        try:
+            return load_from_csv(filename)
+        except Exception:
+            raise Exception(
+                'Error, data must be in valid CSV or HTML format'
+            )
+
+
+    raise Exception(
+        'Error, data must be in valid CSV or HTML format'
+    )
