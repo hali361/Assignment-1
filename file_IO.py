@@ -46,6 +46,7 @@ def load_from_html(filename: str) -> list[dict]:
             #try to change numbers into floats
             try:
                 value = float(value)
+            #continue normal operation if unable to change to float
             except ValueError:
                 pass
 
